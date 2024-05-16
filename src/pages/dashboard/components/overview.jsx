@@ -22,10 +22,10 @@ const Overview = ({ orders }) => {
 
     const data = processData(orders);
 
-    if (data.length != 0) {
+    if (data.length === 0) {
         return (
-        <div className="dark:bg-gray-800 rounded-xl p-8 flex items-center justify-center">
-            <div className="text-center space-y-4">
+        <div className="dark:bg-gray-800 rounded-xl p-8 flex items-center  justify-center">
+            <div className="flex flex-col items-center justify-center text-center space-y-4">
                 <BarChartIcon className="w-12 h-12 text-gray-500" />
                 <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">No Data Available</h3>
                 <p className="text-gray-500 dark:text-gray-400 text-lg">

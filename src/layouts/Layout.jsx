@@ -71,17 +71,19 @@ function Layout() {
 
   useEffect(() => {
     // Vérifiez si l'utilisateur est déjà authentifié lors du chargement de la page
-    const isUserAuthenticated = localStorage.getItem("authenticated");
-    if (isUserAuthenticated === "true") {
-      setAuthenticated(true);
-    }
-    const userLoggedIn = sessionStorage.getItem('isLoggedIn');
-    console.log("The User is logged in", userLoggedIn);
-    if(userLoggedIn != "loggin")
-    {
-      console.log("Trully");
-      navigate('/login') 
-    }
+    // const isUserAuthenticated = localStorage.getItem("authenticated");
+    // if (isUserAuthenticated === "true") {
+    //   setAuthenticated(true);
+    // }else{
+    //   setAuthenticated(false);
+    // }
+    // const userLoggedIn = sessionStorage.getItem('isLoggedIn');
+    // console.log("The User is logged in", userLoggedIn);
+    // if(userLoggedIn != "loggin")
+    // {
+    //   console.log("Trully");
+    //   navigate('/login') 
+    // }
   }, []);
 
  
@@ -260,7 +262,7 @@ function Layout() {
             {/* ${expanded ? "ml-64" : "ml-16"} */}
 
             <main
-              className={` col-span-1 w-full  ${
+              className={`col-span-1 w-full  ${
                 expanded ? "ml-64" : "ml-16"
               } transition-all duration-200 `}
             >

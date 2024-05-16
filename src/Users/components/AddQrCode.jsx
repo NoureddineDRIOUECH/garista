@@ -170,7 +170,7 @@ function AddQrCode() {
                 password : data.password,
                 phone : data.phone,
                 email : data.email,
-                username : data.username,
+                // username : data.username,
                 role_id : parseInt(data.role_id),
              } 
              );

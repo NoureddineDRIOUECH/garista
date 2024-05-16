@@ -4,10 +4,11 @@ import {tabAchat} from './constant/page'
 import Banner from "./Banner/Banner";
 import Tab from "./Tabs/Tab";
 import MenuItems from "./MenuItems/MenuItems";
-import Info from "./Info/Info";
-import Footer from "./Footer/Footer";
-import Achat from "./Achat/Achat";
-import Claims from "./Claims/Claims";
+import Info from "./Info/infov2";
+import Footer from "./Footer/Footerv2";
+import Achat from "./Achat/Achatv2";
+import Claims from "./Claims/Claimsv2";
+import Rate from './Rating/Rate';
 import Spinner from "react-spinner-material";
 import { axiosInstance } from "../../axiosInstance";
 import { APIURL } from "../../lib/ApiKey";
@@ -224,6 +225,12 @@ useEffect(() => {
             <Route path={`/theme/:restoSlug/info`} element={
               <>
               <Info items={restos} infoRes={resInfo}/>
+              <Footer slug={restoSlug}  table_id={extraInfo}/>
+              </>
+            } />
+             <Route path={`/theme/:restoSlug/Rating`}  element={
+              <>
+              <Rate/>
               <Footer slug={restoSlug}  table_id={extraInfo}/>
               </>
             } />

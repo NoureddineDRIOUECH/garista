@@ -290,7 +290,7 @@ export default function DashboardProfile() {
   return (
 
     <TooltipProvider>
-        <div className="flex items-center justify-between space-y-2 p-4 bg-muted/40">
+        <div className="flex items-center justify-between space-y-2 p-4 pt-20 bg-muted/40">
             <h2 className="text-3xl font-bold tracking-tight">Profile</h2>
             <div
               className="flex items-center space-x-2 "

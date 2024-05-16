@@ -50,22 +50,67 @@ export const LoginProvider = ({ children }) => {
       setIsLoggedIn(false);
     }
   };
-
-  const logout =async ({navigate, token}) => {
-    try {
-      console.log("The Token => ", token);
-      const response = await axiosInstance.post(`/api/auth/logout`,{
-        headers:{
-          Authorization: `Bearer ${token}`
-        }
-      });
+  // const login = async (email, password, navigate) => {
+  //   try {
+  //     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content'); // Fetch CSRF token from meta tag
+  //     const response = await axiosInstance.post(`${APIURL}/api/auth/login`, {
+  //       login: email,
+  //       password,
+  //     }, {
+  //       headers: {
+  //         'X-CSRF-TOKEN': csrfToken // Include CSRF token in the request headers
+  //       }
+  //     });
   
-      if (response.status === 200) {
+  //     if (response.status === 200) {
+  //       // setIsLoading(true);
+  //       setIsLoggedIn(true);
+  //       console.log("The Response => ", response.data.user.id);
+  //       setUserData(response.data.user)
+  //       if(response.data.user.id)
+  //       {
+  //         sessionStorage.setItem('dataItem', JSON.stringify(response.data.user.id));
+  //         sessionStorage.setItem('tokenData', JSON.stringify(response.data));
+  //         sessionStorage.setItem('isLoggedIn', "loggin");
+  //         window.localStorage.setItem('AUTHENTICATED', true)
+  //         let Id = JSON.stringify(response.data.user.id)
+  //         try{
+  //           const res = await getRestaurant(Id);
+  //           if(res)
+  //           {
+  //             sessionStorage.setItem('RestoInfo', JSON.stringify(res));
+  //           }
+  //         }
+  //         catch(err)
+  //         {
+  //             console.log("The Error", err);
+  //         }
+  //         navigate("/");
+  //       }
+  //     } else {
+  //       setIsLoading(false);
+  //       setIsLoggedIn(false);
+  //     }
+  //     return response.data;
+  //   } catch (error) {
+  //     console.error('Error during login:', error);
+  //     setError("Email or password are incorrect")
+  //     setIsLoading(false);
+  //     setIsLoggedIn(false);
+  //   }
+  // };
+
+  const logout =async (navigate) => {
+    try {
+      // const response = await axiosInstance.post(`${APIURL}/api/auth/logout`);
+  
         console.log("The Response of Logout => ", response.data);
+        localStorage.setItem("AUTHENTICATED",false);
+        sessionStorage.setItem('isLoggedIn', "not loggin");
         navigate('/Login')
-      } else {
-        setIsLoggedIn(false);
-      }
+      // } else {
+      //   setIsLoggedIn(false);
+      // }
     } catch (error) {
       console.error('Error during login:', error);
     }

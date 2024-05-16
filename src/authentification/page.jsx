@@ -1,35 +1,101 @@
-import React, { useState } from "react";
-import SpinnerIcon from "@/components/icons";
+import React, { useState , useEffect} from "react";
+import DefaultSpinner from "@/components/DefaultSpinner";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { cn } from "@/lib/utils";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useLogin } from "../../actions/Authentification/LoginProvider";
-import { useEffect } from "react";
 import axios from "axios";
-import { useForm } from 'react-hook-form';
 import { axiosInstance } from "../../axiosInstance";
 import { APIURL } from "../../lib/ApiKey";
 import { getRestaurant } from "../../actions/Restaurant/Restaurant";
-import { useDispatch } from 'react-redux';
-import { setRestoInfo } from '../lib/restoSlice';
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
+const formSchema = z.object({
+  password: z.string().min(2, 'Password is required'),
+  email: z
+    .string()
+    .email()
+    // .refine(async (email) => {
+    //   try {
+    //     // Make a request to check if the email already exists
+    //     const response = await axiosInstance.post('/api/checkEmail', {
+    //         email: email,
+    //     });
+
+    //     console.log("The Status => ", response);
+    //     // Assuming the response data structure is { status: boolean }
+    //     return response.data.status; // If status is true, email is not taken
+    //   } catch (error) {
+    //     // Handle errors, e.g., network issues
+    //     console.error('Error checking email:', error);
+    //     return false;
+    //   }
+    // }, 'Email is already taken'),
+})
+
 
 function Login({ onLogin, className, ...props }) {
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (window.localStorage.getItem('AUTHENTICATED')) {
+        navigate("/");
+    }
+},[]);
+
+  const defaultValues = {
+    email: 'admin@gmail.com',
+    password: 'password',
+  }
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("admin@gmail.com");
   const [password, setPassword] = useState("password");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
+  // const [error, setError] = useState("");
   const [userId, setUserId] = useState("")
   const [users, setUsers] = useState([])
-  // const [restoInfo, setRestoInfo] = useState([])
-  
-  const navigate = useNavigate();
   // const { isLoggedIn, login, logout, ErrorMsg } = useLogin();
-  const dispatch = useDispatch();
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const form = useForm({
+   mode: 'onBlur',
+   resolver: zodResolver(formSchema),
+   defaultValues
+})
+const {setError, handleSubmit , formState : {isSubmitting}} = form;
+  // useEffect(() => {
+  //   const  getUser = async () => {
+  //     try {
+  //       const response = await axiosInstance.get(`${APIURL}/api/users`);
+    
+  //       if (response.status === 200) {
+  //         setUsers(response.data.users);
+  //         console.log("The Response of User => ", response.data.users);
+  //       }
+  //       return response.data;
+  //     } catch (error) {
+  //       console.error('Error User:', error);
+  //     }
+  //   }
 
-   const handleNavigation = () => {
+  //   getUser()
+  // }, [])
+
+  // console.log("The Usere => ", users);
+  // useEffect(() => {
+  //   localStorage.setItem('dataKey', users);
+  // }, [users])
+
+  // console.log("The Error => ", ErrorMsg);
+  // Function Handle navigation
+
+  const handleNavigation = () => {
 
     const response = login('admin@gmail.com', 'password')
     if(response)
@@ -68,16 +134,16 @@ function Login({ onLogin, className, ...props }) {
       });
   
       if (response.status === 200) {
-        setIsLoading(true);
+        // setIsLoading(true);
         console.log("The Response => ", response.data.user.id);
         if(response.data.user.id)
         {
           sessionStorage.setItem('dataItem', JSON.stringify(response.data.user.id));
           sessionStorage.setItem('tokenData', JSON.stringify(response.data));
           sessionStorage.setItem('isLoggedIn', "loggin");
+          window.localStorage.setItem('AUTHENTICATED', true)
+          window.localStorage.setItem('dataItem', JSON.stringify(response.data.user.id))
           let Id = JSON.stringify(response.data.user.id)
-
-          // console.log("The Id => ",Id);
           const restoResponse = await axiosInstance.get(`/api/getResto/` + Id,); 
           if (restoResponse.data) {
             // dispatch(setRestoInfo(restoResponse.data));
@@ -95,9 +161,10 @@ function Login({ onLogin, className, ...props }) {
       setIsLoading(false);
     }
   };
-  const onSubmit = async () => {
+  const onSubmit = async (data) => {
+    console.log('the data is ',data)
     setIsLoading(true);
-      const response = login(email, password, navigate);
+    const response = login(data.email, data.password, navigate);
 
     
     if(response)
@@ -113,7 +180,7 @@ function Login({ onLogin, className, ...props }) {
       console.log("Incoreect");
       // setError('Email or password is incorrect')
     }
-    setIsLoading(false);
+    // setIsLoading(false);
   };
   console.log("The logg Id =>", userId);
 
@@ -160,10 +227,25 @@ function Login({ onLogin, className, ...props }) {
               </p>
             </div>
             <div className={cn("grid gap-6", className)}>
+
+    <Form {...form}>
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="grid gap-2">
                   <div className="grid gap-1">
-                    <Input
+                  <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input type="text" 
+                      autoCorrect="off" disabled={isLoading} className={"focus-visible:ring-white"} placeholder='name@example.com' {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+                    {/* <Input
                       className={"focus-visible:ring-white"}
                       id="email"
                       placeholder="name@example.com"
@@ -174,10 +256,30 @@ function Login({ onLogin, className, ...props }) {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                     />
-                    {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
+                    {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>} */}
                   </div>
                   <div className="grid gap-4 relative">
-                    <Input
+                  <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input 
+                      type={showPassword ? "text" : "password"}
+                      autoCorrect="off" value={email}
+                      autoCapitalize="none"
+                      autoComplete="current-password"
+                      // autoCorrect="off"
+                      disabled={isLoading}
+                      className={"focus-visible:ring-white"} 
+                      placeholder='password' {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+                    {/* <Input
                       id="password"
                       placeholder="Password"
                       type={showPassword ? "text" : "password"}
@@ -191,7 +293,7 @@ function Login({ onLogin, className, ...props }) {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                     />
-                    {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
+                    {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>} */}
 
                     <button
                       type="button"
@@ -224,21 +326,20 @@ function Login({ onLogin, className, ...props }) {
                     </button>
                   </div>
 
-                  <Button disabled={isLoading}>
-                    {isLoading ? (
-                      <SpinnerIcon
-                        size={32}
-                        color="white"
-                        className="mr-2 h-4 w-4 animate-spin"
-                      />
-                    ) : (
-                      "Login"
-                    )}
+                  <Button disabled={isLoading} type='submit'>
+                    {isLoading && (
+                        // <Loader type="spinner-default" color='white' size={32}  />
+                      // <SpinnerIcon
+                      //   size={32}
+                      //   color="white"
+                      //   className="mr-2 h-4 w-4 animate-spin"
+                      // />
+                      <DefaultSpinner color="white"  className="mr-4 h-8 w-6" size={32} />
+                    ) }{'   '}Login
                   </Button>
-                  {/* {ErrorMsg && <p className="text-red-500 text-sm">{ErrorMsg}</p>} */}
-
                 </div>
               </form>
+              </Form>
 
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">

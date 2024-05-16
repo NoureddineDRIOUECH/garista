@@ -93,7 +93,7 @@ export function DataTable({
         initialState: {
             pagination: {
                 pageIndex: 0,
-                pageSize: 5,
+                pageSize: 15,
             },
         },
         getCoreRowModel: getCoreRowModel(),
@@ -142,7 +142,7 @@ export function DataTable({
               <SelectValue placeholder={table.getState().pagination.pageSize} />
             </SelectTrigger>
             <SelectContent side="top">
-              {[2, 5, 10, 15, 20].map((pageSize) => (
+              {[15, 20, 50 ,100].map((pageSize) => (
                 <SelectItem key={pageSize} value={`${pageSize}`}>
                   {pageSize}
                 </SelectItem>

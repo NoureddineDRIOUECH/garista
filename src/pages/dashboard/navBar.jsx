@@ -111,7 +111,7 @@ export default function NavBar({ }) {
       setTimeout(() => setCopied(false), 2000); // Reset copied state after 2 seconds
     };
   return (
-    <div className="border-b bg-white">
+    <div className="border-b fixed top-0 left-0 w-full z-20 bg-white">
       <div className="flex h-16 items-center px-4">
         <div className="ml-auto flex items-center space-x-8" dir="rtl">
           <UserNav />

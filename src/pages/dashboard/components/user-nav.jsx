@@ -44,29 +44,30 @@ function UserNav() {
   }, []);
 
   const handleLogout =async () => {
-    // sessionStorage.setItem('isLoggedIn', "not loggin");
+    sessionStorage.setItem('isLoggedIn', "not loggin");
     const token = sessionStorage.getItem('tokenData');
 
     let tok = JSON.parse(token)
-
+    window.localStorage.setItem('AUTHENTICATED', false)
     console.log("The token => ", tok);
-      try {
-        const response = await axiosInstance.post('/api/auth/logout', {}, {  // Empty data object for POST request
-          headers: {
-              'Authorization': `Bearer ${tok.token}`,  // Use template literals to include the token
-              'Content-Type': 'application/json',  // Content-Type should be application/json for JSON data
-          }
-      });
+    navigate('/login');  // Ensure this navigate function is correctly defined/imported
+    //   try {
+    //     const response = await axiosInstance.post('/api/auth/logout', {}, {  // Empty data object for POST request
+    //       headers: {
+    //           'Authorization': `Bearer ${tok.token}`,  // Use template literals to include the token
+    //           'Content-Type': 'application/json',  // Content-Type should be application/json for JSON data
+    //       }
+    //   });
 
-      if (response.status === 200) {
-          console.log("The Response of Logout => ", response.data);
-          navigate('/login');  // Ensure this navigate function is correctly defined/imported
-      } else {
-          setIsLoggedIn(false);  
-      } 
-    }catch (error) {
-        console.error('Error during login:', error);
-      }
+    //   if (response.status === 200 || true) {
+    //       console.log("The Response of Logout => ", response.data);
+    //       navigate('/login');
+    //   } else {
+    //       setIsLoggedIn(false);  
+    //   } 
+    // }catch (error) {
+    //     console.error('Error during login:', error);
+    //   }
   }
 
 

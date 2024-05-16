@@ -25,7 +25,7 @@ export default function Sidebar({ children }) {
   }, [selectedItem]);
 
   return (
-    <aside className="fixed h-screen top-0 left-0 z-10">
+    <aside className="fixed h-screen top-0 left-0 z-50">
       <nav
         className={`h-full transition-all duration-300 flex flex-col bg-white border-r shadow-sm ${
           expanded ? "w-64" : "w-16"

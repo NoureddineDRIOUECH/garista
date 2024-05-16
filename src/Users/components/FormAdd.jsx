@@ -100,40 +100,57 @@ export const FormAdd = ({ initialData, roles, selectedRoleId , handleData, loadi
     }
   };
   const onSubmit = async (data) => {
-    const usernameExists = await checkUsernameExists(data.username);
-    const emailExists = await checkEmailExists(data.email);
-    if (!usernameExists) {
-      form.setError('username', {
-        type: 'manual',
-        message: 'This username is already in use',
-      });
+    console.log('data ', data);
+    // Check if email is dirty and if it's changed
+    if ( initialData && data.email !== initialData.email) {
+      const emailExists = await checkEmailExists(data.email);
+      if (!emailExists) {
+        form.setError('email', {
+          type: 'manual',
+          message: 'This email is already in use',
+        });
+        return;
+      }
     }
-    if (!emailExists) {
-      form.setError('email', {
-        type: 'manual',
-        message: 'This email is already in use',
-      });
+    // If it's an update operation and username is not changed, skip the check
+    if (initialData && data.username === initialData.username) {
+      delete form.errors.username;
+    } else {
+      // Check if username exists
+      const usernameExists = await checkUsernameExists(data.username);
+      if (!usernameExists) {
+        form.setError('username', {
+          type: 'manual',
+          message: 'This username is already in use',
+        });
+      }
     }
-    if (!usernameExists || !emailExists) {
+    
+    console.log("done");
+    // If there are errors, stop further processing
+    if (form.errors.username || form.errors.email) {
       return;
     }
-    console.log('Data : ', data , parseInt(data.role_id))
     
-    if(initialData)
-    {
-        handleUpdate({
-            data,
-            toastMessage,
-            id: initialData.id
-        })
-    }
-    else{
-        handleData({
-            data,
-            toastMessage
-        })
+    console.log('Data : ', data, parseInt(data.role_id));
+  
+    // Perform update or add operation based on initialData
+    if (initialData) {
+      // If it's an update operation, only update email and other fields
+      handleUpdate({
+        data,
+        toastMessage,
+        id: initialData.id,
+      });
+    } else {
+      // If it's an add operation, perform checks for both email and username
+      handleData({
+        data,
+        toastMessage,
+      });
     }
   };
+  
 
   const filteredRoles = roles.filter(role => role.name === 'Manager' || role.name === 'Waiter');
 
@@ -172,13 +189,14 @@ export const FormAdd = ({ initialData, roles, selectedRoleId , handleData, loadi
                   />
               </div>
               <div className="flex gap-3">
+                
               <FormField
                     control={form.control}
                     name="username"
                     render={({ field }) => (
                       <FormItem>
                         <FormControl>
-                          <Input type="text" placeholder="Username" className="w-72 p-2 border border-gray-300 rounded-md" disabled={loading} {...field} />
+                          <Input type="text" placeholder="Username" className="w-72 p-2 border border-gray-300 rounded-md" disabled={loading || initialData} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -291,7 +309,7 @@ export const FormAdd = ({ initialData, roles, selectedRoleId , handleData, loadi
           }
               
         
-          <Button disabled={loading} type="submit" variant="outline" className="justify-center !flex items-center max-w-max mx-auto w-full bg-black hover:bg-black text-white hover:text-white">
+          <Button disabled={loading || !form.formState.isValid} type="submit" variant="outline" className="justify-center !flex items-center max-w-max mx-auto w-full bg-black hover:bg-black text-white hover:text-white">
                 {action}
             </Button>
         </form>
