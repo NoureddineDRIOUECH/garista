@@ -1,0 +1,17 @@
+.message-box-info {
+    margin-top: 1rem;
+    margin-inline: 1rem;
+    background: #28509E;
+
+    background: linear-gradient(90deg, rgb(230, 229, 229) 0%, rgb(40, 80, 158) 100%);
+    
+    padding: 10px; /* Espacement interne de la boîte d'information */
+    border-radius: 24px; /* Bord arrondi de la boîte d'information */
+    display: flex; /* Affichage en mode flex pour aligner les éléments horizontalement */
+    align-items: center; /* Alignement vertical des éléments au centre */
+  }
+  
+  .message-text {
+    margin-left: 10px; /* Espacement à gauche du texte */
+    color: #000000; /* Couleur du texte */
+  }

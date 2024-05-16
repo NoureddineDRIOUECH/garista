@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+.layout-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Utilise toute la hauteur de la fenêtre */
+  }
+
+  header {
+    flex-grow: 0;
+
+  }
+
+  .flex {
+    display: flex;
+  }
+
+  main {
+    flex-grow: 1; /* Utilise tout l'espace restant */
+    overflow-y: auto; /* Ajoute un défilement vertical si le contenu dépasse */
+  }
+
+  .sidebar {
+    flex: 0 0 250px; /* Fixe la largeur de la barre latérale à 250px */
+    height: 100%;
+    overflow-y: auto; /* Ajoute un défilement vertical si le contenu dépasse */
+    position: fixed; /* Fixe la barre latérale */
+    top: 0; /* Aligne la barre latérale en haut */
+    left: 0; /* Aligne la barre latérale à gauche */
+  }
+
+  @media screen and (max-width: 768px) {
+    .flex {
+      flex-direction: column; /* Change la direction de la flexbox en colonne sur les écrans plus petits */
+    }
+
+    .sidebar {
+      position: static; /* Change la position en statique sur les écrans plus petits */
+      width: 100%; /* Utilise toute la largeur de l'écran sur les écrans plus petits */
+    }
+  }

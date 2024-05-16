@@ -1,0 +1,203 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+    font-family: "THICCCBOI-BOLD";
+    src: url("../public/fonts/Webfont/THICCCBOI-Medium.woff2");
+    font-style: normal;
+}
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+body{
+    background-color: #FBFBFB;
+    font-family: "THICCCBOI-BOLD",sans-serif;
+}
+
+.customWidth {
+  width: calc(100% - 4rem);
+}
+
+.grid__content{
+    grid-template-columns: 2.5fr 1fr;
+}
+.grid__content__Profile{
+    grid-template-columns: 0fr .97fr;
+
+}
+
+
+#qrcode-id-unique {
+    width: 246px !important;
+    height: 139px !important;
+    max-width: -moz-max-content;
+    max-width: max-content;
+    margin-inline: auto;
+}
+#qrcode-id-unique-nav{
+    width: 300px !important;
+    height: 300px !important;
+    max-width: -moz-max-content;
+    max-width: max-content;
+    margin-inline: auto;
+}
+#qrcode-id-unique-custom{
+    width: 260px !important;
+    height: 200px !important;
+    max-width: -moz-max-content;
+    max-width: max-content;
+    margin-inline: auto;
+
+}
+
+#CustomQR {
+    background: linear-gradient(
+    to bottom,
+    #3b82f6 0%,
+    #3b82f6 50%,
+    white 50%,
+    white 100%
+  );
+  border-radius: .5rem;
+}
+
+#CustomQR-1 {
+    background: linear-gradient(
+        to bottom,
+        white 0%,
+        white 50%,
+        #3b82f6 50%,
+        #3b82f6 100%
+      );
+      border-radius: .5rem;
+}
+
+#CustomQR-2 {
+    background: linear-gradient(
+        to bottom,
+        #3b82f6 0%,
+        #3b82f6 50%,
+        #3b82f6 50%,
+        #3b82f6 100%
+      );
+      border-radius: .5rem;
+}
+
+#CustomQR-3 {
+    border: 1px solid #3b82f6;
+      border-radius: .5rem;
+}
+
+#CustomQR-4 {
+    background: linear-gradient(
+        to bottom,
+        white 0%,
+        white 50%,
+        #3b82f6 50%,
+        #3b82f6 100%
+      );
+      border-radius: .5rem;
+}
+.form-drag{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 2px dashed #1475cf;
+    height: 150px;
+    width: 380px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+  .uploaded-row{
+    margin: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-radius: 5px;
+    background-color: #e9f0ff;
+  }
+
+  .upload-content{
+    display: flex;
+    align-items: center;
+  }
+  .bar-chart .recharts-bar-rectangle {
+    transition: fill 3s;
+}
+
+.bar-chart .recharts-bar-rectangle:hover {
+    fill: #28509E;
+}

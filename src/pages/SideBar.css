@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+.menu-btn{
+    position: relative;
+    right: -17px;
+    top: 3.5%;
+    width: 24px;
+    height: 24px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #fff;
+    border: 2px solid #f6f6f6;
+    background-color: black;
+}

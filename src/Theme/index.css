@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@font-face {
+    font-family: "THICCCBOI-BOLD";
+    src: url("../public/fonts/Webfont/THICCCBOI-Medium.woff2");
+    font-style: normal;
+}
+body{
+    background-color: #FBFBFB;
+    font-family: "THICCCBOI-BOLD",sans-serif;
+}
