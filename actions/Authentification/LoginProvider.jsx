@@ -23,33 +23,33 @@ export const LoginProvider = ({ children }) => {
   //   localStorage.setItem('dataKey', users);
   // }, [users]);
   
-  const login = async (email, password, navigate) => {
-    try {
-      const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content'); // Fetch CSRF token from meta tag
-      const response = await axiosInstance.post(`${APIURL}/api/auth/login`, {
-        login: email,
-        password,
-      }, {
-        headers: {
-          'X-CSRF-TOKEN': csrfToken // Include CSRF token in the request headers
-        }
-      });
+  // const login = async (email, password, navigate) => {
+  //   try {
+  //     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content'); // Fetch CSRF token from meta tag
+  //     const response = await axiosInstance.post(`${APIURL}/api/auth/login`, {
+  //       login: email,
+  //       password,
+  //     }, {
+  //       headers: {
+  //         'X-CSRF-TOKEN': csrfToken // Include CSRF token in the request headers
+  //       }
+  //     });
   
-      if (response.status === 200) {
-        setIsLoggedIn(true);
-        // console.log("The Response => ", response.data.user);
-        setUserData(response.data.user)
-        // navigate("/Dashboard");
-      } else {
-        setIsLoggedIn(false);
-      }
-      return response.data;
-    } catch (error) {
-      console.error('Error during login:', error);
-      setErrorMsg("Email or password are incorrect")
-      setIsLoggedIn(false);
-    }
-  };
+  //     if (response.status === 200) {
+  //       setIsLoggedIn(true);
+  //       // console.log("The Response => ", response.data.user);
+  //       setUserData(response.data.user)
+  //       // navigate("/Dashboard");
+  //     } else {
+  //       setIsLoggedIn(false);
+  //     }
+  //     return response.data;
+  //   } catch (error) {
+  //     console.error('Error during login:', error);
+  //     setErrorMsg("Email or password are incorrect")
+  //     setIsLoggedIn(false);
+  //   }
+  // };
   // const login = async (email, password, navigate) => {
   //   try {
   //     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content'); // Fetch CSRF token from meta tag
@@ -117,7 +117,7 @@ export const LoginProvider = ({ children }) => {
   };
 
   return (
-    <LoginContext.Provider value={{ isLoggedIn, login, logout, ErrorMsg, isStill, userData }}>
+    <LoginContext.Provider value={{ isLoggedIn, logout, ErrorMsg, isStill, userData }}>
       {children}
     </LoginContext.Provider>
   );

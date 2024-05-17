@@ -70,21 +70,31 @@ function Layout() {
   }, []);
 
   useEffect(() => {
-    // Vérifiez si l'utilisateur est déjà authentifié lors du chargement de la page
-    // const isUserAuthenticated = localStorage.getItem("authenticated");
-    // if (isUserAuthenticated === "true") {
-    //   setAuthenticated(true);
-    // }else{
-    //   setAuthenticated(false);
-    // }
-    // const userLoggedIn = sessionStorage.getItem('isLoggedIn');
-    // console.log("The User is logged in", userLoggedIn);
-    // if(userLoggedIn != "loggin")
-    // {
-    //   console.log("Trully");
-    //   navigate('/login') 
-    // }
-  }, []);
+    // Check if user is authenticated on component mount
+    const isUserAuthenticated = localStorage.getItem("AUTHENTICATED");
+    if (isUserAuthenticated === "true") {
+      setAuthenticated(true);
+    } else {
+      setAuthenticated(false);
+      navigate('/login'); // Redirect to login page if not authenticated
+    }
+  }, [navigate]);
+  // useEffect(() => {
+  //   // Vérifiez si l'utilisateur est déjà authentifié lors du chargement de la page
+  //   // const isUserAuthenticated = localStorage.getItem("authenticated");
+  //   // if (isUserAuthenticated === "true") {
+  //   //   setAuthenticated(true);
+  //   // }else{
+  //   //   setAuthenticated(false);
+  //   // }
+  //   // const userLoggedIn = sessionStorage.getItem('isLoggedIn');
+  //   // console.log("The User is logged in", userLoggedIn);
+  //   // if(userLoggedIn != "loggin")
+  //   // {
+  //   //   console.log("Trully");
+  //   //   navigate('/login') 
+  //   // }
+  // }, []);
 
  
 

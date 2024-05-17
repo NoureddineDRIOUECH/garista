@@ -155,6 +155,7 @@ function AddQrCode() {
           
     }
 
+
     const handleUpdate = async ({
         data,
         toastMessage,

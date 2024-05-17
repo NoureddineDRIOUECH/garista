@@ -46,7 +46,7 @@ const formSchema = z.object({
 function Login({ onLogin, className, ...props }) {
   const navigate = useNavigate();
   useEffect(() => {
-    if (window.localStorage.getItem('AUTHENTICATED')) {
+    if (window.localStorage.getItem('AUTHENTICATED' && sessionStorage.getItem('isLoggedIn')==='loggin')) {
         navigate("/");
     }
 },[]);
@@ -136,14 +136,18 @@ const {setError, handleSubmit , formState : {isSubmitting}} = form;
       if (response.status === 200) {
         // setIsLoading(true);
         console.log("The Response => ", response.data.user.id);
+        let role = response.data.role;
+
         if(response.data.user.id)
         {
           sessionStorage.setItem('dataItem', JSON.stringify(response.data.user.id));
           sessionStorage.setItem('tokenData', JSON.stringify(response.data));
           sessionStorage.setItem('isLoggedIn', "loggin");
+          sessionStorage.setItem('dataStaff', JSON.stringify(response.data.user))
           window.localStorage.setItem('AUTHENTICATED', true)
+          sessionStorage.setItem('role', JSON.stringify(response.data.role));
           window.localStorage.setItem('dataItem', JSON.stringify(response.data.user.id))
-          let Id = JSON.stringify(response.data.user.id)
+          let Id = role == 'user' ? JSON.stringify(response.data.user.id) : JSON.stringify(response.data.user.user.id)
           const restoResponse = await axiosInstance.get(`/api/getResto/` + Id,); 
           if (restoResponse.data) {
             // dispatch(setRestoInfo(restoResponse.data));

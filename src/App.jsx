@@ -9,6 +9,8 @@ import { Toaster } from "react-hot-toast";
 import { QueryClient } from "react-query";
 import axios from "axios";
 import { APIURL } from "../lib/ApiKey";
+import { Toaster as Notification } from "@/components/ui/toaster"
+
 // import { CartProvider } from "./context/CartContext";
 function App() {
 
@@ -49,6 +51,7 @@ function App() {
                 {/* <CartProvider> */}
                     <Toaster />
                     <RouterProvider router={router}></RouterProvider>
+                    <Notification />
                 {/* </CartProvider> */}
             </LoginProvider>
     {/* </Context> */}

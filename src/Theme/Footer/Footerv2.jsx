@@ -3,6 +3,7 @@
  * @see https://v0.dev/t/1KfDJUvuhln
  * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
  */
+import Logo from './negative-feedback-icon.svg'
 import {Link} from "react-router-dom"
 import React from 'react'
 export default function Footer({
@@ -10,8 +11,9 @@ export default function Footer({
     table_id
 }) {
   return (
-    <footer className="fixed bottom-0 left-0 right-0 z-50 flex rounded-t-xl  h-14 w-full items-center justify-around bg-white shadow-lg dark:bg-gray-900">
-      <Link to={`/theme/${slug}?table_id=${table_id}`}  className="flex flex-col items-center justify-center gap-1">
+    // <footer className="fixed bottom-0 left-0 right-0 z-50 flex rounded-t-xl h-14 w-full items-center justify-around bg-white shadow-lg dark:bg-gray-900 max-w-sm mx-auto">
+<footer className="fixed bottom-0 left-0 right-0 z-50  rounded-t-xl h-14 flex w-full items-center justify-around mx-auto bg-white shadow-lg dark:bg-gray-900">
+        <Link to={`/theme/${slug}?table_id=${table_id}`}  className="flex flex-col items-center justify-center gap-1">
         <HomeIcon className="h-6 w-6 text-gray-500 dark:text-gray-400" />
         <span className="text-xs font-medium text-gray-500 dark:text-gray-400">Home</span>
       </Link>
@@ -20,7 +22,8 @@ export default function Footer({
         <span className="text-xs font-medium text-gray-500 dark:text-gray-400">Rating</span>
       </Link>
       <Link to={`/theme/${slug}/Claims?table_id=${table_id}`} className="flex flex-col items-center justify-center gap-1">
-        <FileIcon className="h-6 w-6 text-gray-500 dark:text-gray-400" />
+        {/* <FileIcon className="h-6 w-6 text-gray-500 dark:text-gray-400" /> */}
+        <img src={Logo} alt="claims"  className="h-6 w-6 "/>
         <span className="text-xs font-medium text-gray-500 dark:text-gray-400">Claims</span>
       </Link>
       <Link to={`/theme/${slug}/Achat?table_id=${table_id}`} className="flex flex-col items-center justify-center gap-1">
@@ -38,20 +41,20 @@ export default function Footer({
 function FileIcon(props) {
   return (
     <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
-      <path d="M14 2v4a2 2 0 0 0 2 2h4" />
-    </svg>
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z" />
+  <line x1="9" y1="11" x2="15" y2="11" />
+</svg>
+
   )
 }
 

@@ -103,6 +103,7 @@ export default function DashboardCompany() {
     const [currData, setCurrData] = useState([])
     const [name, setName] = useState('')
     const [slug, setSlug] = useState('')
+    const [phone,setPhone] = useState('');
     const [description, setDescription] = useState('')
     const [address, setAddress] = useState('')
     const [wifiPass, setWifiPass] = useState('')
@@ -177,6 +178,7 @@ export default function DashboardCompany() {
              setTiktok_pixel(item.tiktok_pixel)
              setAds_pixel(item.ads_pixel)
              setAnylytics(item.anylytics)
+            //  setPhone(item.phone)
          })
         }
     }
@@ -235,7 +237,8 @@ export default function DashboardCompany() {
                website_url,
                whatsapp,
                wifi_pass: wifiPass,
-               youtube
+               youtube,
+            //    phone
            })
 
            handleImageUpdate(logo)
@@ -280,6 +283,7 @@ export default function DashboardCompany() {
                cover_image,
                logo,
                resto_id: restos.id
+            //    phone,
            })
 
         //    handleImageUpdate(logo)
@@ -426,6 +430,7 @@ export default function DashboardCompany() {
             <div className='w-full md:w-1/2'>
                 <label className='block mb-3'>Phone number :</label>
                 <Input
+                onChange={(e) => setPhone(e.target.value)}
                 //   onChange={(e) => setWifiPass(e.target.value)}
                     id="picture" type="text" className='mt-3' placeholder="Phone Number"/>
             </div>

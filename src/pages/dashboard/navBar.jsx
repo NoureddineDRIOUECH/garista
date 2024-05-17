@@ -19,6 +19,7 @@ import { Button } from "../../components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "../../components/ui/dropdown-menu";
 import TeamSwitcher from "../../pages/dashboard/components/team-switcher";
@@ -30,6 +31,10 @@ import { getRestaurant } from "../../../actions/Restaurant/Restaurant";
 import { useEffect } from "react";
 import { getUserById } from "../../../actions/User/CreateUser";
 import { axiosInstance } from "../../../axiosInstance";
+import Pusher from 'pusher-js';
+import { formatDistanceToNow } from 'date-fns';
+// import { toast } from "react-hot-toast";
+import { useToast } from "@/components/ui/use-toast"
 
 export default function NavBar({ }) {
   const defaultPageURL = "https://votre-domaine.com/page";
@@ -40,21 +45,42 @@ export default function NavBar({ }) {
   const [userDat, setUserDat] = useState([])
   const idUser = sessionStorage.getItem('dataItem');
   const [restoInfo, setRestoInfo] = useState([]);
+ const [notifications, setNotifications] = useState([])
+ const { toast } = useToast()
 
   console.log('The User Resto => ',idUser);
+  // Initialize Pusher
+  const fetchNotifications = async (id) => {
+    try {
+      // Make a GET request to your server's API endpoint to fetch notifications
+      console.log('the resto info ',id);
+      const response = await axiosInstance.get(`/api/getNotifications/${id}`);
+      console.log("fetched data is ", response.data);
+      // If successful, update the notifications state with the fetched data
+      setNotifications(response.data);
+    } catch (error) {
+      console.error('Error fetching notifications:', error);
+    }
+  };
+ 
   useEffect(() => {
     const getUserData = async () => {
       try{
-        const res = await axiosInstance.get('/api/getResto/'+idUser);
-        if(res)
+        // const res = await axiosInstance.get('/api/getResto/'+idUser);
+        const restore = await sessionStorage.getItem('RestoInfo')
+        if(restore)
         {
-          setRestoInfo(res)
-          let Data = res.data;
+          let DataResto = JSON.parse(restore)
+          // setRestoInfo(DataResto)
+          console.log("the restau info ", DataResto, restore, restoInfo);
+          // let Data = res.data;
           let Slug = "";
-          Data.map((item) => {
-            console.log("tje item => " , item);
+          DataResto.map((item) => {
             Slug = item.slug
+            console.log("tje item => " , item, item.id);
             setRestoInfo(item)
+            fetchNotifications(item.id)
+            console.log();
           })
           setQRCodeURL(`https://admin.garista.com/theme/${Slug}`)
         }
@@ -74,6 +100,65 @@ export default function NavBar({ }) {
     getUserData();
   }, []);
 
+  useEffect(() => {
+  
+    // Fetch notifications from the server upon component mount
+    // const pusher = new Pusher('84cd32aea0c4b858f18e', {
+    //   cluster: 'eu',
+    //   encrypted: true,
+    // });
+    // // Subscribe to the channel
+    // const channel = pusher.subscribe('my-channel');
+    // channel.bind('form-submited', function(data) {
+    //   // Update notifications state
+    //   let Dates = [];
+    //   // Dates = data
+    //   // Dates.length > 0 && Dates.map(item => {
+    //   // })
+    //   console.log("The Item of The Data => ", Dates.post);
+    //   if (data.post.resto_id === restoInfo.id) {
+    //     // Update notifications state with the new notification
+    //     setNotifications(prevNotifications => [data, ...prevNotifications]);
+    //   }
+    //   // setNotifications((prevNotifications) => [data, ...prevNotifications]);
+    // });
+    const pusher = new Pusher('84cd32aea0c4b858f18e', {
+      cluster: 'eu',
+      encrypted: true,
+    });
+  
+    const channel = pusher.subscribe('my-channel');
+  
+    channel.bind('form-submited', function(data) {
+      try {
+        console.log("Data received from Pusher:", data);
+  
+        // Assuming data contains the notification directly
+        const newNotification = data.post
+        console.log('New notification', newNotification);
+        console.log('the restau info', restoInfo.id)
+         let resoIdNoti = newNotification.resto_id
+        // Ensure notification is for the current restaurant
+        if (parseInt(resoIdNoti) === restoInfo.id) {
+          console.log("New notification for current restaurant:", newNotification);
+          // toast.success(`New notification: ${newNotification.title}`);
+
+            toast({
+              title: newNotification.title,
+              // description: "Friday, February 10, 2023 at 5:57 PM",
+            })
+          setNotifications(prevNotifications => [newNotification, ...prevNotifications]);
+        }
+      } catch (error) {
+        console.error('Error updating notifications:', error);
+      }
+    });
+    // Cleanup
+    return () => {
+      channel.unbind_all();
+      channel.unsubscribe();
+    };
+  }, [restoInfo.id]);
   // useEffect(() => {
   //   const fetchValue = async () => {
   //     let Data = JSON.parse(usersData);
@@ -94,7 +179,6 @@ export default function NavBar({ }) {
   };
   const urlWithParams = `${baseUrl}`;
 
-    console.log("The User Data => ", qrCodeURL);
   if(loading)
   {
       return(
@@ -110,6 +194,7 @@ export default function NavBar({ }) {
       setCopied(true); // Set copied state to true
       setTimeout(() => setCopied(false), 2000); // Reset copied state after 2 seconds
     };
+    console.log('All notfication', notifications);
   return (
     <div className="border-b fixed top-0 left-0 w-full z-20 bg-white">
       <div className="flex h-16 items-center px-4">
@@ -164,7 +249,46 @@ export default function NavBar({ }) {
               </div>
             </DialogContent>
           </Dialog>
+          <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button className="relative" size="icon" variant="ghost">
+              <BellIcon className="h-6 w-6" />
+              {notifications.length != 0 &&
+              <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-red-500" />
+              }
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-80 p-4">
+  <DropdownMenuLabel className="mb-2 text-lg font-medium">Notifications</DropdownMenuLabel>
+  <div className="space-y-4">
+    {notifications.length == 0 ? (
+      <p className="ml-5 text-sm text-gray-500 dark:text-gray-400">No notifications</p>
+    ) : (
+      notifications
+      .reverse()
+      .slice(0, 3)
+      .map((notification, index) => {
+        // console.log("The Notifications => ", notification.post);
+        const { title, created_at } = notification;
 
+        const timeAgo = formatDistanceToNow(new Date(created_at), { addSuffix: true });
+
+        return (
+          <div key={index} className="flex items-start gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900">
+              <CalendarCheck2Icon className="h-5 w-5 text-blue-500 dark:text-blue-400" />
+            </div>
+            <div>
+              <p className="text-sm font-medium">{title.length > 20 ? title.slice(0, 30) + '...' : title }</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">{timeAgo}</p>
+            </div>
+          </div>
+        );
+      })
+    )}
+  </div>
+</DropdownMenuContent>
+        </DropdownMenu>
           {/* <TeamSwitcher /> */}
           {/* <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -202,4 +326,92 @@ export default function NavBar({ }) {
       </div>
     </div>
   );
+}
+function BellIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+      <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+    </svg>
+  )
+}
+
+
+function CalendarCheck2Icon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M8 2v4" />
+      <path d="M16 2v4" />
+      <path d="M21 14V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8" />
+      <path d="M3 10h18" />
+      <path d="m16 20 2 2 4-4" />
+    </svg>
+  )
+}
+
+
+function CalendarIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M8 2v4" />
+      <path d="M16 2v4" />
+      <rect width="18" height="18" x="3" y="4" rx="2" />
+      <path d="M3 10h18" />
+    </svg>
+  )
+}
+
+function UsersIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+      <circle cx="9" cy="7" r="4" />
+      <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+    </svg>
+  )
 }

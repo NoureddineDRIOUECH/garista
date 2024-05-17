@@ -11,11 +11,10 @@ import { Textarea } from "@/components/ui/textarea"
 export default function Rate() {
   return (
     <div className="flex flex-col h-screen bg-white dark:bg-gray-950">
-     
-      <main className="flex-1 p-6 md:p-10">
-        <div className="max-w-md mx-auto">
-          <h2 className="text-2xl font-bold mb-4">Share Your Feedback</h2>
-          <div className="bg-white dark:bg-gray-900 rounded-lg p-6 space-y-6">
+  <main className="flex-1 p-6 md:p-10">
+    <div className="content-container">
+      <h2 className="text-2xl font-bold mb-4">Share Your Feedback</h2>
+      <div className="bg-white dark:bg-gray-900 rounded-lg p-6 space-y-6">
             <div className="flex items-center gap-4">
               <span className="text-lg font-semibold">Overall Experience</span>
               <div className="flex items-center gap-2 ml-auto">

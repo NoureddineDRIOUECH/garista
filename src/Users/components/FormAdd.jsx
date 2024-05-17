@@ -100,56 +100,63 @@ export const FormAdd = ({ initialData, roles, selectedRoleId , handleData, loadi
     }
   };
   const onSubmit = async (data) => {
-    console.log('data ', data);
-    // Check if email is dirty and if it's changed
-    if ( initialData && data.email !== initialData.email) {
-      const emailExists = await checkEmailExists(data.email);
-      if (!emailExists) {
-        form.setError('email', {
-          type: 'manual',
-          message: 'This email is already in use',
-        });
-        return;
-      }
-    }
-    // If it's an update operation and username is not changed, skip the check
-    if (initialData && data.username === initialData.username) {
-      delete form.errors.username;
-    } else {
-      // Check if username exists
-      const usernameExists = await checkUsernameExists(data.username);
-      if (!usernameExists) {
-        form.setError('username', {
-          type: 'manual',
-          message: 'This username is already in use',
-        });
-      }
-    }
-    
-    console.log("done");
-    // If there are errors, stop further processing
-    if (form.errors.username || form.errors.email) {
-      return;
-    }
-    
-    console.log('Data : ', data, parseInt(data.role_id));
-  
-    // Perform update or add operation based on initialData
+    // Check if it's an update operation and if initialData exists
     if (initialData) {
-      // If it's an update operation, only update email and other fields
-      handleUpdate({
-        data,
-        toastMessage,
-        id: initialData.id,
-      });
+        // If it's an update operation, check if username or email has changed
+        if (data.username !== initialData.username) {
+            const usernameExists = !await checkUsernameExists(data.username);
+            if (usernameExists) {
+                form.setError('username', {
+                    type: 'manual',
+                    message: 'This username is already in use',
+                });
+                return; // Stop further processing if username exists
+            }
+        }
+        if (data.email !== initialData.email) {
+            const emailExists = !await checkEmailExists(data.email);
+            if (emailExists) {
+                form.setError('email', {
+                    type: 'manual',
+                    message: 'This email is already in use',
+                });
+                return; // Stop further processing if email exists
+            }
+        }
+        // If neither username nor email exists, proceed with update
+        handleUpdate({
+            data,
+            toastMessage,
+            id: initialData.id,
+        });
     } else {
-      // If it's an add operation, perform checks for both email and username
-      handleData({
-        data,
-        toastMessage,
-      });
+        // If it's an add operation, check both username and email existence
+        const usernameExists = !await checkUsernameExists(data.username);
+        const emailExists = !await checkEmailExists(data.email);
+        if (usernameExists) {
+            form.setError('username', {
+                type: 'manual',
+                message: 'This username is already in use',
+            });
+        }
+        if (emailExists) {
+            form.setError('email', {
+                type: 'manual',
+                message: 'This email is already in use',
+            });
+        }
+        // If either username or email exists, stop further processing
+        if (usernameExists || emailExists) {
+            return;
+        }
+        // If both username and email are unique, proceed with adding data
+        handleData({
+            data,
+            toastMessage,
+        });
     }
-  };
+};
+
   
 
   const filteredRoles = roles.filter(role => role.name === 'Manager' || role.name === 'Waiter');
@@ -309,7 +316,7 @@ export const FormAdd = ({ initialData, roles, selectedRoleId , handleData, loadi
           }
               
         
-          <Button disabled={loading || !form.formState.isValid} type="submit" variant="outline" className="justify-center !flex items-center max-w-max mx-auto w-full bg-black hover:bg-black text-white hover:text-white">
+          <Button disabled={loading} type="submit" variant="outline" className="justify-center !flex items-center max-w-max mx-auto w-full bg-black hover:bg-black text-white hover:text-white">
                 {action}
             </Button>
         </form>

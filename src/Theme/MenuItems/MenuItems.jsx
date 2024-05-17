@@ -16,6 +16,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import { addItem, removeAll } from '../../lib/cartSlice';
 
+
 import Dettaille from './Dettaille';
 import { APIURL } from '../../../lib/ApiKey';
 function MenuItems({dishes, selectedTab, restoId }) {
@@ -49,6 +50,7 @@ function MenuItems({dishes, selectedTab, restoId }) {
   const toggleModal = (item) => {
     setSelectedItem(item); 
     setIsModalOpen(!isModalOpen);
+    console.log("Selected Item: ", item);
   };
   useEffect(() => {
     tabAchat.length = 0;
@@ -88,24 +90,24 @@ function MenuItems({dishes, selectedTab, restoId }) {
           </div>
         </form>
 
-        <div className='overflow-x-auto pl-4 '>
+        <div className='overflow-x-auto px-3 mx-auto'>
           <h1 className='pb-2 text-lg text-black font-semibold'>{selectedTab}</h1>
-          <div className='grid grid-cols-2'>
+          <div className='grid grid-cols-2 gap-5'>
             {filteredCategories.length > 0 && filteredCategories.map((item, index) => (
-                <div className="tabs-container overflow-x-auto pl-4" key={index}>
+                <div className="tabs-container overflow-x-auto" key={index}>
                   <div className="flex gap-4">
-                <Credenza key={item.id} className={"!bg-white"} open={isModalOpen} onOpenChange={setIsModalOpen} >
-                        <CredenzaTrigger asChild className="h-auto !bg-white">
+                <Credenza key={item.id} className={"!bg-white !py-0"} open={isModalOpen} onOpenChange={setIsModalOpen} >
+                        <CredenzaTrigger asChild className="h-auto w-full !py-0 !bg-white">
                           <Button className="px-0" >
-                        <div key={item.id} className="relative shadow-md rounded-[10px] border-gray-300 border inline-block">
+                        <div key={item.id} className="relative shadow-md rounded-[10px] w-full border-gray-300 border inline-block">
                           <div
                             onClick={() => setSelectedItem(item)}
-                            className="tab items-center justify-center h-auto w-[150px] overflow-hidden p-1.5 text-lg font-semibold rounded-[8px] cursor-pointer transition-colors"
+                            className="tab items-center justify-center h-full w-full overflow-hidden p-1.5 text-lg font-semibold rounded-[8px] cursor-pointer transition-colors"
                           >
                             <img src={`${APIURL}/storage/${item.image}`} alt="Menu Icon" className="w-full object-cover rounded-[10px] h-32" />
                             <div className='text-black flex justify-between items-center py-2 px-3'>
                               <div>
-                                <h2 className="text-[16px] mb-0 ">{item.name}</h2>
+                                <h2 className="text-[16px] mb-0 ">{item.name.slice(0,7)}..</h2>
                                 <p className='text-sm'>{item.price}</p>
                               </div>
                               
@@ -155,7 +157,8 @@ function MenuItems({dishes, selectedTab, restoId }) {
                             </CredenzaHeader>
                           <CredenzaBody className="space-y-4 text-center text-sm sm:pb-0 sm:text-left">
                             <CredenzaTitle>{selectedItem.name}</CredenzaTitle>
-                            <p className="m-0 text-neutral-400">{selectedItem.description}</p>
+                            {console.log("Selected Item in Modal: ", selectedItem)}
+                            <p className="m-0 text-neutral-400">{selectedItem.desc}</p>
                             <div className='flex items-center justify-center '>
                               <span className='grid grid-cols-3 font-bold '><IoIosAdd size={22}/><span className=' text-lg'>{quantity}</span><IoIosRemove size={22}/></span>
                               <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" className="bi bi-dot mx-1 " viewBox="0 0 16 16" style={{ color: '#28509E' }}>
