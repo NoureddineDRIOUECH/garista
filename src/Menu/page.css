@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.theme-1 {
+  background: url("/Themes/theme-1.png");
+  background-size: cover;
+}
+.theme-2 {
+  background: url("/Themes/theme-2.png");
+  background-size: cover;
+}
+.theme-3 {
+  background: url("/Themes/theme-3.png");
+  background-size: cover;
+}
+.theme-4 {
+  background: url("/Themes/theme-4.png");
+  background-size: cover;
+}
+
+.react-colorful {
+  width: 100% !important;
+  height: inherit;
+  border-radius: 0;
+}
+
+.react-colorful__saturation {
+  border-radius: 6px 6px 0 0 !important;
+}
+
+.react-colorful__last-control {
+  border-radius: 0 0 6px 6px !important;
+}
+
+.card-menu {
+  background: var(--surface-card);
+  border-radius: 10px;
+}
+
+.p-colorpicker-panel {
+  background: #f1f5f9;
+  border: 2px solid #f1f5f9;
+  border-radius: 4px;
+}
+
+.p-colorpicker-panel .p-colorpicker-color-handle {
+  position: absolute;
+  top: 0px;
+  left: 150px;
+  border-radius: 100%;
+  width: 10px;
+  height: 10px;
+  border-width: 1px;
+  border-style: solid;
+  margin: -5px 0 0 -5px;
+  cursor: pointer;
+  opacity: 0.85;
+}
+
+.p-colorpicker-panel .p-colorpicker-color-handle {
+  border-color: white;
+  border-width: 2px;
+}
+
+.p-colorpicker-panel .p-colorpicker-hue-handle {
+  position: absolute;
+  top: 150px;
+  left: 0px;
+  width: 21px;
+  margin-left: -2px;
+  margin-top: -5px;
+  height: 10px;
+  border-width: 2px;
+  border-style: solid;
+  opacity: 0.85;
+  cursor: pointer;
+}
+
+.p-colorpicker-preview.p-inputtext {
+  outline: transparent;
+  border-radius: 4px;
+  margin-block: 4px;
+}
+
+.menuButton {
+  @apply inline-flex items-center justify-center h-10 px-4 py-2 text-black border border-gray-400 bg-background hover:bg-accent hover:text-accent-foreground rounded-[.5rem] text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
+}
